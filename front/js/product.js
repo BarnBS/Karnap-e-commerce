@@ -16,7 +16,7 @@ function getProductPage(){
         .then((res) => res.json())
         .then((product) => {
 
-             //Get the id of the current page.
+             //Get the url of the current page.
             let currentUrl = window.location.href;
 
             //Generate url that each product page should have.
