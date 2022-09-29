@@ -7,8 +7,6 @@ const productColors = document.querySelector("#colors");
 /* ===================================================================================================================
 Request the API's datas and display the right product in the product page thanks to the product's id and the page's id
 ===================================================================================================================== */
-
-
 function getProductPage(){
 
     fetch("http://localhost:3000/api/products")
