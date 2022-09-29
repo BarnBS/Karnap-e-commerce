@@ -8,10 +8,12 @@ function displayProductsIndex() {
 
     //Request the API's data
     fetch("http://localhost:3000/api/products")
+
         .then((res) => res.json())
         .then((product) => {
             //Display the products in the section id #items in index.html
             for (let i = 0; i < 8; i++){
+                
                 productsDisplay.innerHTML += `
                 <a href="./product.html?id=${product[i]._id}">
                     <article>
