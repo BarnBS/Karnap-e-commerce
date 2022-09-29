@@ -1,3 +1,4 @@
+const pageTitle = document.querySelector(".pageTitle");
 const productName = document.querySelector("#title");
 const productPrice = document.querySelector("#price");
 const productImage = document.querySelector(".item__img");
@@ -26,6 +27,7 @@ function getProductPage(){
                 // If current page's url = url of product page, then display the right data.
                 if (currentUrl == urlProduct){     
 
+                    pageTitle.innerHTML = `${product[i].name}`;
                     productName.innerHTML=`${product[i].name}`;
                     productPrice.innerHTML=`${product[i].price}`;
                     productImage.innerHTML =`<img src="${product[i].imageUrl}" alt=${product[i].altTxt}>`;
