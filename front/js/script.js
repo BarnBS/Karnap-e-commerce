@@ -4,7 +4,7 @@ const productsDisplay = document.querySelector(".items");
 Request the API's datas and display the products in Index.html
 ============================================================ */
 
-function displayProducts() {
+function displayProductsIndex() {
 
     //Request the API's data
     fetch("http://localhost:3000/api/products")
@@ -26,5 +26,4 @@ function displayProducts() {
         .catch((err) => console.log(err));
 }
 
-displayProducts();
-
+displayProductsIndex();
