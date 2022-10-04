@@ -78,7 +78,9 @@ function saveProducts () {
             productPicked.color = productColors.value;
             productPicked.quantity = quantitySelector.value;
 
+            // If the product displayed on the page has the name of the one of the object of the JSON list, then THIS product and not another one will be added to the storage.
             if (productName.textContent == product[i].name) {
+                // If color OR quantity is not informed then alert
                 if (productPicked.color == "" || productPicked.quantity == 0){
                     alert("Veuillez saisir une couleur et une quantité avant d'ajouter au panier.")
                 } else{
@@ -101,8 +103,7 @@ function getProducts () {
     fetch("http://localhost:3000/api/products")
     .then((res) => res.json())
     .then((product) => {
-        // If "cartStorage" already exists, then get it back.
-        // If product A is stored, then get it so that we add new product to the storage.
+        // If "cartStorage" already exists, then get its content so that we add a new product to the storage.
         if(localStorage.getItem("cartStorage")){
             cartStorage = JSON.parse(localStorage.getItem("cartStorage"));
         }
@@ -116,9 +117,9 @@ function getProducts () {
     .catch((err) => console.log(err));
 }
 
-/* ===================================================================================================================
-
-===================================================================================================================== */
+/* ============================================
+Send the array of selected products to the cart
+================================================ */
 
 function addToCart() {
     
@@ -126,12 +127,10 @@ function addToCart() {
     getProducts();
 
     cart = JSON.parse(localStorage.getItem("cartStorage"));
-
 }
 
 
 
 
 getProductPage()
-
 addButton.addEventListener("click",addToCart)
