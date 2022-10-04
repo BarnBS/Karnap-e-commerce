@@ -31,7 +31,7 @@ function getProductPage(){
         .then((res) => res.json())
         .then((product) => {
 
-             //Get the url of the current page.
+            //Get the url of the current page.
             currentUrl = window.location.href;
 
             //Generate url that each product page should have.
@@ -95,7 +95,7 @@ function saveProducts () {
 }
 
 /* ======================================================================================
-Get the selected products to add it to the cart array then store that cart array in local
+Get the selected product and add it to the cart array, then store that cart array in local
 ====================================================================================== */
 
 function getProducts () {
