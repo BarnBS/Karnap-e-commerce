@@ -11,13 +11,10 @@ const addButton = document.querySelector("#addToCart")
 let currentUrl;
 let urlProduct;
 
-let productPicked = new Object();
 const quantitySelector = document.querySelector("#quantity");
 let storageString;
 let productStorage = [];
 
-let stringFromStorage;
-let productParsed;
 let cartStorage = [];
 
 let cart = [];
@@ -51,7 +48,6 @@ function getProductPage(){
 
                     // product[i].colors is an array and has to be browsed so each color is in a separated choice option
                     for (let j = 0; j<3 ; j++){    //
-
                         productColors.innerHTML += `<option value="${product[i].colors[j]}">${product[i].colors[j]}</option>`
                     }
                 }
@@ -62,11 +58,11 @@ function getProductPage(){
 }
 
 
-/* ===========================================
-Save the right product in the local storage
-============================================ */
+/* ============================================
+Add product picked in the cart which is an array
+================================================ */
 
-function saveProducts () {
+function addToCart() {
 
     fetch("http://localhost:3000/api/products")
     .then((res) => res.json())
@@ -74,63 +70,61 @@ function saveProducts () {
 
         for (let i = 0 ; i < 8 ; i++) {
 
-            productPicked.id = product[i]._id;
-            productPicked.color = productColors.value;
-            productPicked.quantity = quantitySelector.value;
-
-            // If the product displayed on the page has the name of the one of the object of the JSON list, then THIS product and not another one will be added to the storage.
             if (productName.textContent == product[i].name) {
-                // If color OR quantity is not informed then alert
-                if (productPicked.color == "" || productPicked.quantity == 0){
-                    alert("Veuillez saisir une couleur et une quantité avant d'ajouter au panier.")
-                } else{
-                productStorage.push([productPicked.id, productPicked.color, productPicked.quantity]);
-                storageString = JSON.stringify(productStorage);
+
+                let productPicked = {
+                    id : product[i]._id,
+                    color : productColors.value,
+                    quantity : quantitySelector.value}
+
+                if (productColors.value == "" || productColors.value == "undefined" || quantitySelector.value == 0){
+                    return alert("Veuillez saisir une couleur et une quantité avant d'ajouter au panier.")
+                } else{ 
+                    if (!localStorage.getItem("cartStorage")) {
+                        cartStorage.push(productPicked);
+                        cartString = JSON.stringify(cartStorage);
+                        localStorage.setItem("cartStorage",cartString);
+                    }else {
+                        cartStorage = JSON.parse(localStorage.getItem("cartStorage"));
+                        cartStorage.push(productPicked);
+                        for (let j = 0; j < cartStorage.length; j++) {
+                            cartStorage[j].quantity = Number(cartStorage[j].quantity);
+                            if (cartStorage[j].id==productPicked.id && cartStorage[j].color == productPicked.color){
+                                cartStorage[j].quantity += Number(productPicked.quantity);
+                                cartStorage.pop();
+                            }
+                        cartString = JSON.stringify(cartStorage);
+                        localStorage.setItem("cartStorage",cartString);
+                        cartStorage = [];
+                        }
+                    }
                 }
             }
         }
-        localStorage.setItem("storageString", storageString);
-    })          
+    })     
     .catch((err) => console.log(err));
 }
-
-/* ======================================================================================
-Get the selected product and add it to the cart array, then store that cart array in local
-====================================================================================== */
-
-function getProducts () {
-
-    fetch("http://localhost:3000/api/products")
-    .then((res) => res.json())
-    .then((product) => {
-        // If "cartStorage" already exists, then get its content so that we add a new product to the storage.
-        if(localStorage.getItem("cartStorage")){
-            cartStorage = JSON.parse(localStorage.getItem("cartStorage"));
-        }
-
-        stringFromStorage = localStorage.getItem("storageString");
-        productParsed = JSON.parse(stringFromStorage);
-        cartStorage.push(productParsed);
-        localStorage.setItem("cartStorage", JSON.stringify(cartStorage));
-        productStorage = [];
-    })
-    .catch((err) => console.log(err));
-}
-
-/* ============================================
-Send the array of selected products to the cart
-================================================ */
-
-function addToCart() {
-    
-    saveProducts();
-    getProducts();
-
-    cart = JSON.parse(localStorage.getItem("cartStorage"));
-}
-
-
 
 
 getProductPage()
 addButton.addEventListener("click",addToCart)
+
+
+
+
+
+
+
+
+// for (let j = 0; j < cartStorage.length; j++) {
+//     cartStorage[j][2] = Number(cartStorage[j][2]);
+//     // console.log(cartStorage);
+//     // console.log(cartStorage[j]);
+//     if (cartStorage[j][0]!=product[i]._id || cartStorage[j][1]  != productColors.value) {
+//         cartStorage.push(productPicked);
+//         // console.log(`cartStorage si push du nouveau produit = ${cartStorage}`);
+//    }
+//    else{
+//         cartStorage[j][2] += Number(quantitySelector.value);
+//         // console.log(`cartStorage si concat quantité = ${cartStorage}`);
+//     }
