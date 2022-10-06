@@ -118,23 +118,3 @@ function addToCart() {
 
 getProductPage()
 addButton.addEventListener("click",addToCart)
-
-
-
-
-
-
-
-
-// for (let j = 0; j < cartStorage.length; j++) {
-//     cartStorage[j][2] = Number(cartStorage[j][2]);
-//     // console.log(cartStorage);
-//     // console.log(cartStorage[j]);
-//     if (cartStorage[j][0]!=product[i]._id || cartStorage[j][1]  != productColors.value) {
-//         cartStorage.push(productPicked);
-//         // console.log(`cartStorage si push du nouveau produit = ${cartStorage}`);
-//    }
-//    else{
-//         cartStorage[j][2] += Number(quantitySelector.value);
-//         // console.log(`cartStorage si concat quantité = ${cartStorage}`);
-//     }
