@@ -5,19 +5,14 @@ const productPrice = document.querySelector("#price");
 const productImage = document.querySelector(".item__img");
 const productDescription = document.querySelector("#description");
 const productColors = document.querySelector("#colors");
+const quantitySelector = document.querySelector("#quantity");
 
 const addButton = document.querySelector("#addToCart")
 
 let currentUrl;
 let urlProduct;
 
-const quantitySelector = document.querySelector("#quantity");
-let storageString;
-let productStorage = [];
-
 let cartStorage = [];
-
-let cart = [];
 
 /* ===================================================================================================================
 Request the API's datas and display the right product in the product page thanks to the product's id and the page's id
@@ -59,7 +54,7 @@ function getProductPage(){
 
 
 /* ============================================
-Add product picked in the cart which is an array
+Add selected product in the cart which is an array
 ================================================ */
 
 function addToCart() {
@@ -67,27 +62,31 @@ function addToCart() {
     fetch("http://localhost:3000/api/products")
     .then((res) => res.json())
     .then((product) => {
-
+        // We browse the list of products
         for (let i = 0 ; i < 8 ; i++) {
-
+            // If a product of the list is displayed on the page, then we can add it to the cart.
             if (productName.textContent == product[i].name) {
-
+                
                 let productPicked = {
                     id : product[i]._id,
                     color : productColors.value,
                     quantity : quantitySelector.value}
 
+                //If we have not selected a color OR a quantity, then we cannot add the item to the cart. 
                 if (productColors.value == "" || productColors.value == "undefined" || quantitySelector.value == 0){
                     return alert("Veuillez saisir une couleur et une quantité avant d'ajouter au panier.")
                 } else{ 
+                    //If the local storage is empty, then add the selected product to the cart and store is in localStorage.
                     if (!localStorage.getItem("cartStorage")) {
                         cartStorage.push(productPicked);
                         cartString = JSON.stringify(cartStorage);
                         localStorage.setItem("cartStorage",cartString);
+                    // Else we get back what's in local storage then add the new item.
                     }else {     
                         cartStorage = JSON.parse(localStorage.getItem("cartStorage"));
                         let foundProductId = cartStorage.find(p => p.id == productPicked.id)
                         let foundProductColor = cartStorage.find(p => p.color == productPicked.color)
+                            //If an item is already in the cart, then we update the quantity.
                             if (foundProductId && foundProductColor){
                                 for (let j = 0; j < cartStorage.length; j++) {
                                     if (cartStorage[j].id == productPicked.id && cartStorage[j].color == productPicked.color){
@@ -95,9 +94,11 @@ function addToCart() {
                                         cartStorage[j].quantity += Number(productPicked.quantity);
                                     }
                                 }
+                            //If it's a new item, then we add it simply to the cart.
                             }else {
                                 cartStorage.push(productPicked);
                             }
+                        //Finally, the whole cart is stored in localStorage.
                         cartString = JSON.stringify(cartStorage);
                         localStorage.setItem("cartStorage",cartString);
                         cartStorage = [];
