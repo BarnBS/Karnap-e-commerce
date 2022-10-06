@@ -84,19 +84,23 @@ function addToCart() {
                         cartStorage.push(productPicked);
                         cartString = JSON.stringify(cartStorage);
                         localStorage.setItem("cartStorage",cartString);
-                    }else {
+                    }else {     
                         cartStorage = JSON.parse(localStorage.getItem("cartStorage"));
-                        cartStorage.push(productPicked);
-                        for (let j = 0; j < cartStorage.length; j++) {
-                            cartStorage[j].quantity = Number(cartStorage[j].quantity);
-                            if (cartStorage[j].id==productPicked.id && cartStorage[j].color == productPicked.color){
-                                cartStorage[j].quantity += Number(productPicked.quantity);
-                                cartStorage.pop();
+                        let foundProductId = cartStorage.find(p => p.id == productPicked.id)
+                        let foundProductColor = cartStorage.find(p => p.color == productPicked.color)
+                            if (foundProductId && foundProductColor){
+                                for (let j = 0; j < cartStorage.length; j++) {
+                                    if (cartStorage[j].id == productPicked.id && cartStorage[j].color == productPicked.color){
+                                        cartStorage[j].quantity = Number(cartStorage[j].quantity)
+                                        cartStorage[j].quantity += Number(productPicked.quantity);
+                                    }
+                                }
+                            }else {
+                                cartStorage.push(productPicked);
                             }
                         cartString = JSON.stringify(cartStorage);
                         localStorage.setItem("cartStorage",cartString);
                         cartStorage = [];
-                        }
                     }
                 }
             }
