@@ -68,9 +68,14 @@ function addToCart() {
             if (productName.textContent == product[i].name) {
                 
                 let productPicked = {
+                    name : product[i].name,
                     id : product[i]._id,
                     color : productColors.value,
-                    quantity : quantitySelector.value}
+                    quantity : quantitySelector.value,
+                    price : product[i].price,
+                    img : product[i].imageUrl,
+                    alt : product[i].altTxt
+                }
 
                 //If we have not selected a color OR a quantity, then we cannot add the item to the cart. 
                 if (productColors.value == "" || productColors.value == "undefined" || quantitySelector.value == 0){
