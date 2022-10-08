@@ -1,6 +1,4 @@
-const cartItems = document.querySelector("#cart__items")
-
-
+const cartItems = document.querySelector("#cart__items");
 
 /* ==========================================
 Display the items in localStorage on the page
@@ -22,7 +20,7 @@ function displayCart() {
                 <div class="cart__item__content">
                     <div class="cart__item__content__description">
                         <h2>${cart[i].name}</h2>
-                        <p>${cart[i].color}</p>
+                        <p class="itemColor">${cart[i].color}</p>
                         <p>${cart[i].price}€</p>
                     </div>
                     <div class="cart__item__content__settings">
@@ -42,6 +40,34 @@ function displayCart() {
 }
 //===================================================================================
 
+/* ================================================
+Change the quantity of each product that was picked
+================================================= */
+function changeProductQuantity() {
 
+    fetch("http://localhost:3000/api/products")
+    .then((res) => res.json())
+    .then((product) => {
+
+        const allItems = document.querySelectorAll(`.cart__item`);
+        let cart = JSON.parse(localStorage.getItem("cartStorage"));
+        
+        Array.from(allItems)
+        .forEach ( item => {
+            itemQuantity = item.querySelector('input[name = "itemQuantity"]');
+            itemQuantity.addEventListener("change", (event) => {
+                const article = event.target.closest(".cart__item");
+                cart.forEach(storedProduct => {
+                    if(storedProduct.id == article.dataset.id && storedProduct.color == article.dataset.color){
+                        storedProduct.quantity = event.target.value;
+                    }
+                });
+                localStorage.setItem("cartStorage",JSON.stringify(cart));        
+            })
+        })
+    })
+    .catch((err) => console.log(err));
+}
 
 displayCart()
+changeProductQuantity()

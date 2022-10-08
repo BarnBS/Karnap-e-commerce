@@ -91,7 +91,7 @@ function addToCart() {
                         cartStorage = JSON.parse(localStorage.getItem("cartStorage"));
                         let foundProductId = cartStorage.find(p => p.id == productPicked.id)
                         let foundProductColor = cartStorage.find(p => p.color == productPicked.color)
-                            //If an item is already in the cart, then we update the quantity.
+                            //If an item is found in the cart, then we update the quantity.
                             if (foundProductId && foundProductColor){
                                 for (let j = 0; j < cartStorage.length; j++) {
                                     if (cartStorage[j].id == productPicked.id && cartStorage[j].color == productPicked.color){
