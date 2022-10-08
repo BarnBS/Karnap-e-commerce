@@ -52,11 +52,13 @@ function changeProductQuantity() {
         const allItems = document.querySelectorAll(`.cart__item`);
         let cart = JSON.parse(localStorage.getItem("cartStorage"));
         
-        Array.from(allItems)
+        Array.from(allItems) //Node list => array conversion
+        //For each item in cart Page, get the right input and add it a 'change' event
         .forEach ( item => {
             itemQuantity = item.querySelector('input[name = "itemQuantity"]');
             itemQuantity.addEventListener("change", (event) => {
                 const article = event.target.closest(".cart__item");
+                // For each product in cartStorage, if the targeted product is the same item as the one displayed on the page, then if we change its quantity, it's updated in the cartStorage
                 cart.forEach(storedProduct => {
                     if(storedProduct.id == article.dataset.id && storedProduct.color == article.dataset.color){
                         storedProduct.quantity = event.target.value;
