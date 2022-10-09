@@ -1,5 +1,6 @@
 const cartItems = document.querySelector("#cart__items");
-var index;
+const totalPrice = document.querySelector("#totalPrice")
+const totalQuantity = document.querySelector("#totalQuantity")
 
 /* ===============================
 Get the cart from the localStorage
@@ -22,7 +23,7 @@ function displayCart() {
     .then((res) => res.json())
     .then(() => {
 
-        let cart = JSON.parse(localStorage.getItem("cartStorage"));
+        let cart = getCart();
         //For each product in the cart, display according to the html model.
         for (let i = 0; i < cart.length; i++) {
             cartItems.innerHTML += `
@@ -63,7 +64,7 @@ function changeProductQuantity() {
     .then(() => {
 
         const allItems = document.querySelectorAll(`.cart__item`);
-        let cart = JSON.parse(localStorage.getItem("cartStorage"));
+        let cart = getCart();
         
         Array.from(allItems) //Node list => array conversion
         //For each item in cart Page, get the right input and add it a 'change' event
@@ -77,7 +78,8 @@ function changeProductQuantity() {
                         storedProduct.quantity = product.target.value;
                     }
                 })
-                localStorage.setItem("cartStorage",JSON.stringify(cart));        
+                localStorage.setItem("cartStorage",JSON.stringify(cart));
+                window.location.reload();      
             })
         })
     })
@@ -90,40 +92,58 @@ Delete article from cart
 ====================== */
 function deleteProduct () {
     fetch("http://localhost:3000/api/products")
-        .then((res) => res.json())
-        .then(() => {
+    .then((res) => res.json())
+    .then(() => {
 
-            const allItems = document.querySelectorAll(`.cart__item`);
+        const allItems = document.querySelectorAll(`.cart__item`);
 
-            Array.from(allItems) //Node list => array conversion
-            //For each item in cart Page, get the right input and add it a 'change' event
-            .forEach ( item => {
-                deleteBtn = item.querySelector('.deleteItem');
-                deleteBtn.addEventListener("click", (product) => {
-                    const article = product.target.closest(".cart__item");
-                    // For each product in cartStorage, if the targeted product is the same item as the one displayed on the page, then if we change its quantity, it's updated in the cartStorage
-                    cart = getCart();
-                    cart.forEach(storedProduct => {
-                        if(storedProduct.id == article.dataset.id && storedProduct.color == article.dataset.color){
-                            index =  cart.indexOf(storedProduct);
-                            cart.splice(index,1)
-                            localStorage.setItem("cartStorage",JSON.stringify(cart));
-                            window.location.reload();
-                        }  
-                    })
+        Array.from(allItems) //Node list => array conversion
+        //For each item in cart Page, get the right input and add it a 'change' event
+        .forEach ( item => {
+            deleteBtn = item.querySelector('.deleteItem');
+            deleteBtn.addEventListener("click", (product) => {
+                const article = product.target.closest(".cart__item");
+                // For each product in cartStorage, if the targeted product is the same item as the one displayed on the page,then if we change its quantity, it's updated in the cartStorage
+                cart = getCart();
+                cart.forEach(storedProduct => {
+                    if(storedProduct.id == article.dataset.id && storedProduct.color == article.dataset.color){
+                        cart.splice(cart.indexOf(storedProduct),1)
+                        localStorage.setItem("cartStorage",JSON.stringify(cart));
+                        window.location.reload();
+                    }  
                 })
             })
         })
-        .catch((err) => console.log(err));
+    })
+    .catch((err) => console.log(err));
+}
+
+/* ===============
+Total price to pay
+=============== */
+
+function totalCost () {
+    fetch("http://localhost:3000/api/products")
+    .then((res) => res.json())
+    .then(() => {
+        cart = getCart();
+        let quantity = 0;
+        let cost = 0;
+        cart.forEach ( item => {
+            quantity +=  Number(item.quantity);
+            cost += Number(item.quantity) * Number(item.price);
+        })
+        totalQuantity.textContent = `${quantity}`
+        totalPrice.textContent = `${cost}`
+    })
+    .catch((err) => console.log(err));
 }
 
 
 displayCart()
 changeProductQuantity()
 deleteProduct () 
-
-
-
+totalCost ()
 
 
 
