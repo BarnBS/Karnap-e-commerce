@@ -5,7 +5,6 @@ const totalQuantity = document.querySelector("#totalQuantity")
 /* ===============================
 Get the cart from the localStorage
 ================================ */
-
 function getCart() {
     let cart = [];
     if (localStorage.getItem("cartStorage") != null) {
@@ -121,17 +120,21 @@ function deleteProduct () {
 /* ===============
 Total price to pay
 =============== */
-
 function totalCost () {
     fetch("http://localhost:3000/api/products")
     .then((res) => res.json())
-    .then(() => {
+    .then((product) => {
         cart = getCart();
         let quantity = 0;
         let cost = 0;
         cart.forEach ( item => {
+            // For security reasons, we use the price given from the API and not the localStorage
+            product.forEach (product => { 
             quantity +=  Number(item.quantity);
-            cost += Number(item.quantity) * Number(item.price);
+                if (product._id == item.id) {
+                    cost += Number(item.quantity) * Number(product.price);
+                }
+            })
         })
         totalQuantity.textContent = `${quantity}`
         totalPrice.textContent = `${cost}`
@@ -144,14 +147,3 @@ displayCart()
 changeProductQuantity()
 deleteProduct () 
 totalCost ()
-
-
-
-// for (let i = 0; i < cart.length; i++) {
-//     console.log(cart[i].id);
-//     if(cart[i].id == article.dataset.id && cart[i].color == article.dataset.color){
-//         cart.splice(i,1)
-//         localStorage.setItem("cartStorage",JSON.stringify(cart));
-//         window.location.reload();
-//     }
-// }
