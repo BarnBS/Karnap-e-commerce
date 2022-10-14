@@ -20,6 +20,7 @@ const emailId = document.querySelector("#email");
 const emailErrorMsg = document.querySelector("#emailErrorMsg");
 
 const orderBtn = document.querySelector("#order");
+let contact = new Object();
 
 /* ===============================
 Get the cart from the localStorage
@@ -164,18 +165,22 @@ function userValidation () {
     validationForm(firstNameId,
        /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u,firstNameErrorMsg,
        `Le prénom doit contenir uniquement des lettres, des espaces ou '.`);
+
     validationForm(lastNameId,
         /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u,
         lastNameErrorMsg,
         `Le nom doit contenir uniquement des lettres, des espaces ou '.`);
+
     validationForm(addressId,
         /^[rR]ue.+[a-zA-Zéè'-].+[0-9]{5}|[cC]hemin.+[a-zA-Zéè'-].+[0-9]{5}|[aA]venue.+[a-zA-Zéè'-].+[0-9]{5}$/gmu,
         addressErrorMsg,
         `L'adress doit contenir rue/avenue/chemin + nom de la rue + code Postal complet de 5 chiffres.`);
+
     validationForm(cityId,
         /^.+[a-zA-Zéèëê'-]$/gmu,
         cityErrorMsg,
         `Le nom de la ville ne nécessite pas de majuscules. Accents, ', - et espaces sont autorisés.`);
+
     validationForm(emailId,
         /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/gmu,
         emailErrorMsg,
@@ -196,9 +201,9 @@ function changeForm () {
     })
 }
 
-/* ======================================================================
-Allow the user to write his informations in the form and see its validity
-====================================================================== */
+/* ============================================================
+If the form application is correct then allow to place an order
+============================================================= */
 function placeAnOrder () {
     if (
         validationForm(firstNameId,
@@ -225,12 +230,37 @@ function placeAnOrder () {
              emailErrorMsg,
              `L'adress mail doit être de la forme "nomDeService@adresseDuServeur". Exemples: nomPrenom@gmail.com ou bonjour@orange.fr`)
     ) {
-        alert("ok")
-    }else{
-        alert("ko")
+        let cart = getCart();
+        let arrayProducts = [];
+        cart.forEach (element => {arrayProducts.push(element.id)});
+
+        let fetchOptions = {
+            method : "POST",
+            headers : {
+                "Content-Type" : "application/json",
+            }, 
+            body: JSON.stringify({
+                contact : {
+                    firstName : `${firstNameId.value}`,
+                    lastName : `${lastNameId.value}`,
+                    address : `${addressId.value}`,
+                    city : `${cityId.value}`,
+                    email : `${emailId.value}`,
+                },
+                products : arrayProducts
+            }),
+        }
+
+        fetch("http://localhost:3000/api/products/order", fetchOptions)
+            .then((res) => res.json())
+
+    } else{
+        alert("Veuillez remplir tous les champs du formulaire sans erreur.")
     }
 }
-        
+
+
+
         
 displayCart()
 changeProductQuantity()
@@ -240,6 +270,7 @@ totalCost ()
 changeForm ();
 
 orderBtn.addEventListener("click", (event) => {
+    placeAnOrder ();
     event.preventDefault();
-    placeAnOrder ()
+    location.href = "../html/confirmation.html";
 })
