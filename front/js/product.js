@@ -78,8 +78,8 @@ function addToCart() {
                 }
 
                 //If we have not selected a color OR a quantity, then we cannot add the item to the cart. 
-                if (productColors.value == "" || productColors.value == "undefined" || quantitySelector.value == 0){
-                    return alert("Veuillez saisir une couleur et une quantité avant d'ajouter au panier.")
+                if (productColors.value == "" || productColors.value == "undefined" || quantitySelector.value == 0 || quantitySelector.value > 100) {
+                    return alert("Veuillez saisir une couleur et une quantité entre 0 et 100 avant d'ajouter au panier.")
                 } else{ 
                     //If the local storage is empty, then add the selected product to the cart and store is in localStorage.
                     if (!localStorage.getItem("cartStorage")) {

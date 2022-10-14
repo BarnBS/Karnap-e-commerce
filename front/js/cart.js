@@ -184,7 +184,7 @@ function userValidation () {
     validationForm(emailId,
         /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/gmu,
         emailErrorMsg,
-        `L'adress mail doit être de la forme "nomDeService@adresseDuServeur". Exemples: nomPrenom@gmail.com ou bonjour@orange.fr`);
+        `L'adresse email doit être de la forme "nomDeService@adresseDuServeur". Exemples: nomPrenom@gmail.com ou bonjour@orange.fr`);
 }
 
 
@@ -202,7 +202,7 @@ function changeForm () {
 }
 
 /* ============================================================
-If the form application is correct then allow to place an order
+If the whole form application is correct then allow to place an order
 ============================================================= */
 function placeAnOrder () {
     if (
@@ -228,7 +228,7 @@ function placeAnOrder () {
          validationForm(emailId,
              /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/gmu,
              emailErrorMsg,
-             `L'adress mail doit être de la forme "nomDeService@adresseDuServeur". Exemples: nomPrenom@gmail.com ou bonjour@orange.fr`)
+             `L'adresse email doit être de la forme "nomDeService@adresseDuServeur". Exemples: nomPrenom@gmail.com ou bonjour@orange.fr`)
     ) {
         let cart = getCart();
         let arrayProducts = [];
@@ -268,6 +268,6 @@ totalCost ()
 changeForm ();
 
 orderBtn.addEventListener("click", (event) => {
-    placeAnOrder ();
     event.preventDefault();
+    placeAnOrder ();
 })
