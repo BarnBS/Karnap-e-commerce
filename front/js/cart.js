@@ -253,14 +253,12 @@ function placeAnOrder () {
 
         fetch("http://localhost:3000/api/products/order", fetchOptions)
             .then((res) => res.json())
+            .then((contact) => {location.href = `../html/confirmation.html?id=${contact.orderId}`})
 
     } else{
         alert("Veuillez remplir tous les champs du formulaire sans erreur.")
     }
 }
-
-
-
         
 displayCart()
 changeProductQuantity()
@@ -272,5 +270,4 @@ changeForm ();
 orderBtn.addEventListener("click", (event) => {
     placeAnOrder ();
     event.preventDefault();
-    location.href = "../html/confirmation.html";
 })
