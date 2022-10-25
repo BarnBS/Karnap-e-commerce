@@ -33,20 +33,24 @@ function getProductPage(){
 
                 // Compare current url with the url that each product page should have.
                 // If current page's url = url of product page, then display the right data.
-                if (idFromUrl == product[i]._id){     
+                if (idFromUrl == product[i]._id){
+                    function productToDisplay() {
+                        pageTitle.innerHTML = `${product[i].name}`;
+                        productName.innerHTML=`${product[i].name}`;
+                        productPrice.innerHTML=`${product[i].price}`;
+                        productImage.innerHTML =`<img src="${product[i].imageUrl}" alt=${product[i].altTxt}>`;
+                        productDescription.innerHTML =`${product[i].description}`;
 
-                    pageTitle.innerHTML = `${product[i].name}`;
-                    productName.innerHTML=`${product[i].name}`;
-                    productPrice.innerHTML=`${product[i].price}`;
-                    productImage.innerHTML =`<img src="${product[i].imageUrl}" alt=${product[i].altTxt}>`;
-                    productDescription.innerHTML =`${product[i].description}`;
-
-                    // product[i].colors is an array and has to be browsed so each color is in a separated choice option
-                    for (let j = 0; j<3 ; j++){    //
-                        productColors.innerHTML += `<option value="${product[i].colors[j]}">${product[i].colors[j]}</option>`
-                    }
+                        // product[i].colors is an array and has to be browsed so each color is in a separated choice option
+                        for (let j = 0; j<3 ; j++){    //
+                            productColors.innerHTML += `<option value="${product[i].colors[j]}">${product[i].colors[j]}</option>`
+                        }
+                    }  
+                    return productToDisplay();
                 }
             }
+            alert("Le produit demandé n'existe pas, vous allez être redirigé vers la page d'acceuil.");
+            location.href = `../html/index.html`;
         })
         .catch((err) => console.log(err));
 
@@ -78,7 +82,7 @@ function addToCart() {
                 }
 
                 //If we have not selected a color OR a quantity, then we cannot add the item to the cart. 
-                if (productColors.value == "" || productColors.value == "undefined" || quantitySelector.value == 0 || quantitySelector.value > 100) {
+                if (productColors.value == "" || productColors.value == "undefined" || quantitySelector.value == 0 || quantitySelector.value > 100 || quantitySelector.value < 1) {
                     return alert("Veuillez saisir une couleur et une quantité entre 0 et 100 avant d'ajouter au panier.")
                 } else{ 
                     //If the local storage is empty, then add the selected product to the cart and store is in localStorage.
@@ -86,6 +90,7 @@ function addToCart() {
                         cartStorage.push(productPicked);
                         cartString = JSON.stringify(cartStorage);
                         localStorage.setItem("cartStorage",cartString);
+                        window.alert(`Vous avez ajouté ${quantitySelector.value} ${productPicked.name} de couleur ${productPicked.color}`);
                     // Else we get back what's in local storage then add the new item.
                     }else {     
                         cartStorage = JSON.parse(localStorage.getItem("cartStorage"));
@@ -99,9 +104,11 @@ function addToCart() {
                                         cartStorage[j].quantity += Number(productPicked.quantity);
                                     }
                                 }
+                                window.alert(`Vous avez ajouté ${quantitySelector.value} ${productPicked.name} de couleur ${productPicked.color}`);
                             //If it's a new item, then we add it simply to the cart.
                             }else {
                                 cartStorage.push(productPicked);
+                                window.alert(`Vous avez ajouté ${quantitySelector.value} ${productPicked.name} de couleur ${productPicked.color}`);
                             }
                         //Finally, the whole cart is stored in localStorage.
                         cartString = JSON.stringify(cartStorage);

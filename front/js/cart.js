@@ -164,7 +164,7 @@ Test if each item is valid
 function userValidation () {
     validationForm(firstNameId,
        /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u,firstNameErrorMsg,
-       `Le prénom doit contenir uniquement des lettres, des espaces ou '.`);
+       `Le prénom doit contenir uniquement des lettres, des espaces,' ou -.`);
 
     validationForm(lastNameId,
         /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u,
