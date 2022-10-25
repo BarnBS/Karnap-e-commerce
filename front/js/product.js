@@ -24,16 +24,16 @@ function getProductPage(){
         .then((product) => {
 
             //Get the url of the current page.
-            currentUrl = window.location.href;
+            currentUrl = window.location;
+            let currentUrlSearch = new URLSearchParams(currentUrl.search);
+            let idFromUrl = currentUrlSearch.get("id");
 
             //Generate url that each product page should have.
-            for (let i = 0 ; i < 8 ; i++) {        
-
-                urlProduct = `file:///C:/Users/barna/Desktop/P5-Dev-Web-Kanap/front/html/product.html?id=${product[i]._id}`;
+            for (let i = 0 ; i < 8 ; i++) {
 
                 // Compare current url with the url that each product page should have.
                 // If current page's url = url of product page, then display the right data.
-                if (currentUrl == urlProduct){     
+                if (idFromUrl == product[i]._id){     
 
                     pageTitle.innerHTML = `${product[i].name}`;
                     productName.innerHTML=`${product[i].name}`;
